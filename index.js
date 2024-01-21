@@ -66,7 +66,7 @@ app.post('/api/persons', (request, response) => {
     number: body.number
   })
 
-  person.save().then(savePerson=>{
+  person.save().then(savedPerson=>{
     response.json(savedPerson)
   })
 })
