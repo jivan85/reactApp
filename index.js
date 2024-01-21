@@ -75,7 +75,7 @@ app.post('/api/persons', (request, response) => {
   })
 })
 
-app.put('/api/persons', (request, response) => {
+app.put('/api/persons/:id', (request, response) => {
   const body = request.body
 
   const person = {
@@ -89,7 +89,7 @@ app.put('/api/persons', (request, response) => {
     })
     .catch(error => next(error))
   })
-  
+
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
