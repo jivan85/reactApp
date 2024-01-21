@@ -26,8 +26,11 @@ app.get('/api/persons', (request, response) => {
     })
 })
 
-app.get('/info', (request, response) => {
-  response.send(`Phonebook has info for ${persons.length} people.<br/>${new Date()}`)
+app.get('/info', (request, response,next) => {
+  Person.find({}).then(result => {
+  response.send(`Phonebook has info for ${result.length} people.<br/>${new Date()}`)
+  })
+  .catch(error => next(error))
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
@@ -89,6 +92,17 @@ app.put('/api/persons/:id', (request, response,next) => {
     })
     .catch(error => next(error))
   })
+
+  app.get('/api/persons/:id', (request, response,next) => {
+    Person.findById(request.params.id)
+    .then(person =>{
+      response.json(person)
+    })
+    .catch(error => next(error))
+  })
+
+ 
+  
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
