@@ -52,28 +52,27 @@ app.delete('/api/persons/:id', (request, response, next) => {
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
-
+  let newPerson = true
   if (!body.name||!body.number) {
     return response.status(400).json({ 
       error: 'name or number missing' 
     })
   }
-
-  if(persons.filter(person=>person.name===body.name).length>0){
-    return response.status(400).json({ 
-      error: 'name must be unique' 
-    })
-  }
-
-  const person = new Person({
+  const person = {
     name: body.name,
     number: body.number
+  }
+  if(persons.filter(person=>person.name===body.name).length>0){
+    newPerson = false
+  }
+    Person.findByIdAndUpdate(request.params.id, person, { new: newPerson })
+    .then(updatedPerson => {
+      response.json(updatedPerson)
+    })
+    .catch(error => next(error))
   })
 
-  person.save().then(savedPerson=>{
-    response.json(savedPerson)
-  })
-})
+
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
